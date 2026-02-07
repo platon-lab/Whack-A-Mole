@@ -212,13 +212,13 @@
                 if (character.classList.contains('up')) {
                     gameOver();
                 }
-            }, 500); 
+            }, 700); 
 
             // Ховаємо персонажа через короткий час, якщо не клікнули (але failTimeout спрацює раніше)
             peepTimeout = setTimeout(() => {
                 character.classList.remove('up');
                 if (gameRunning) peep();
-            }, 550);
+            }, 750);
         }
 
         function startGame() {
