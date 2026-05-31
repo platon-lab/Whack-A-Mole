@@ -25,6 +25,83 @@
             color: #2d3436;
         }
 
+        /* Контейнер для ігрового поля та списку героїв */
+        .main-layout {
+            display: flex;
+            align-items: flex-start;
+            gap: 30px;
+        }
+
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Стильна панель списку героїв з можливістю гортання */
+        .heroes-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 200px;
+            max-height: 440px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .heroes-panel h3 {
+            margin: 0 0 10px 0;
+            text-align: center;
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+        .heroes-list {
+            overflow-y: auto;
+            flex-grow: 1;
+            padding-right: 5px;
+        }
+
+        /* Стилізація скроллбару для краси */
+        .heroes-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        .heroes-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .heroes-list::-webkit-scrollbar-thumb {
+            background: #c7c7c7;
+            border-radius: 10px;
+        }
+        .heroes-list::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        .hero-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .hero-icon {
+            width: 30px;
+            height: 30px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: #e0e0e0;
+            border-radius: 50%;
+        }
+
         .stats-panel {
             background: white;
             padding: 20px;
@@ -119,7 +196,7 @@
         }
 
         .btn-start { background: #55efc4; color: #00b894; }
-        .btn-start:hover { transform: scale(0.5); background: #00b894; color: white; }
+        .btn-start:hover { transform: scale(0.95); background: #00b894; color: white; }
 
         .btn-reset { background: #ff7675; color: white; font-size: 12px; padding: 8px 20px; }
         .btn-reset:hover { background: #d63031; }
@@ -140,17 +217,21 @@
         <button class="btn-reset" onclick="resetData()">Скинути рекорд</button>
     </div>
 
-    <div class="game-container" id="grid">
-        <div class="hole"><div class="character"></div></div>
-        <div class="hole"><div class="character"></div></div>
-        <div class="hole"><div class="character"></div></div>
-        <div class="hole"><div class="character"></div></div>
-        <div class="hole"><div class="character"></div></div>
-        <div class="hole"><div class="character"></div></div>
-        <div class="hole"><div class="character"></div></div>
-        <div class="hole"><div class="character"></div></div>
-        <div class="hole"><div class="character"></div></div>
-    </div>
+    <!-- Нова структура: поле гри + список героїв поруч -->
+    <div class="main-layout">
+        <div class="left-column">
+            <div class="game-container" id="grid">
+                <div class="hole"><div class="character"></div></div>
+                <div class="hole"><div class="character"></div></div>
+                <div class="hole"><div class="character"></div></div>
+                <div class="hole"><div class="character"></div></div>
+                <div class="hole"><div class="character"></div></div>
+                <div class="hole"><div class="character"></div></div>
+                <div class="hole"><div class="character"></div></div>
+                <div class="hole"><div class="character"></div></div>
+                <div class="hole"><div class="character"></div></div>
+            </div>
+        </div>
 
     <div class="overlay" id="overlay">
         <h1 id="msgTitle">ГРА: СПІЙМАЙ ТВАРИНКУ</h1>
@@ -166,8 +247,15 @@
         const overlay = document.getElementById('overlay');
         const msgTitle = document.getElementById('msgTitle');
         const msgStats = document.getElementById('msgStats');
+        const heroesListContainer = document.getElementById('heroesList');
 
-        const images = ['Tito.png', 'Smartik.png', 'Junior.png', 'Fil.png', 'Milka.png', 'Bark.png'];
+        // Повний список з 20 героїв (6 старих + 14 нових)
+        const images = [
+            'Tito.png', 'Smartik.png', 'Junior.png', 'Fil.png', 'Milka.png', 'Bark.png',
+            'Persik.png', 'Spike.png', 'Alyonka.png', 'Lilu.png', 'Manya.png', 'Liza.png',
+            'Grivna.png', 'Ben.png', 'Goldi.png', 'Raf.png', 'Veles.png', 'Masha.png',
+            'Brilliantik.png', 'Richik.png'
+        ];
         
         let score = 0;
         let lastHole;
@@ -178,6 +266,27 @@
         // Завантаження даних
         let highScore = localStorage.getItem('mole_highScore') || 0;
         let totalLosses = localStorage.getItem('mole_losses') || 0;
+
+        // Функція для відображення списку героїв у панелі, щоб їх можна було листати
+        function renderHeroesList() {
+            heroesListContainer.innerHTML = '';
+            images.forEach(imgName => {
+                const nameWithoutExt = imgName.replace('.png', '');
+                const item = document.createElement('div');
+                item.className = 'hero-item';
+                
+                const icon = document.createElement('div');
+                icon.className = 'hero-icon';
+                icon.style.backgroundImage = `url('${imgName}')`;
+                
+                const nameSpan = document.createElement('span');
+                nameSpan.innerText = nameWithoutExt;
+                
+                item.appendChild(icon);
+                item.appendChild(nameSpan);
+                heroesListContainer.appendChild(item);
+            });
+        }
 
         function updateStatsUI() {
             const text = `Твій рекорд: ${highScore} | Програшів: ${totalLosses}`;
@@ -272,8 +381,9 @@
 
         characters.forEach(c => c.addEventListener('click', whack));
         
-        // Перший запуск UI
+        // Перший запуск UI та генерація списку героїв
         updateStatsUI();
+        renderHeroesList();
     </script>
 </body>
 </html>
