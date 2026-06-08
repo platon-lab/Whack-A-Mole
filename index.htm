@@ -217,7 +217,7 @@
         <button class="btn-reset" onclick="resetData()">Скинути рекорд</button>
     </div>
 
-    <!-- Нова структура: поле гри + список героїв поруч -->
+    <!-- Структура: поле гри + список героїв поруч -->
     <div class="main-layout">
         <div class="left-column">
             <div class="game-container" id="grid">
@@ -232,7 +232,6 @@
                 <div class="hole"><div class="character"></div></div>
             </div>
         </div>
-
     <div class="overlay" id="overlay">
         <h1 id="msgTitle">ГРА: СПІЙМАЙ ТВАРИНКУ</h1>
         <div id="msgStats" style="text-align: center; margin-bottom: 20px; line-height: 1.6;"></div>
@@ -249,12 +248,12 @@
         const msgStats = document.getElementById('msgStats');
         const heroesListContainer = document.getElementById('heroesList');
 
-        // Повний список з 20 героїв (6 старих + 14 нових)
+        // Повний список героїв (+ додано Shunya.png та Baks.png)
         const images = [
             'Tito.png', 'Smartik.png', 'Junior.png', 'Fil.png', 'Milka.png', 'Bark.png',
             'Persik.png', 'Spike.png', 'Alyonka.png', 'Lilu.png', 'Manya.png', 'Liza.png',
             'Grivna.png', 'Ben.png', 'Goldi.png', 'Raf.png', 'Veles.png', 'Masha.png',
-            'Brilliantik.png', 'Richik.png'
+            'Brilliantik.png', 'Richik.png', 'Shunya.png', 'Baks.png'
         ];
         
         let score = 0;
